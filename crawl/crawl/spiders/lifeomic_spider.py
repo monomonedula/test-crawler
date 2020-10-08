@@ -49,7 +49,7 @@ class LifeomicSpider(scrapy.spiders.CrawlSpider):
                 self.sent_forms.add(form_signature)
                 yield request
         self.save_resp(response)
-        return self._parse(response, **kwargs)
+        yield from self._parse(response, **kwargs)
 
     def save_resp(self, response):
         with open(self.results_file, "a") as f:
@@ -68,7 +68,6 @@ class LifeomicSpider(scrapy.spiders.CrawlSpider):
 
 def form_requests(response, callback):
     for i, form in enumerate(response.xpath("//form")):
-        print(random_inputs_for(inputs_of(form)))
         yield FormRequest.from_response(
             response,
             formnumber=i,
